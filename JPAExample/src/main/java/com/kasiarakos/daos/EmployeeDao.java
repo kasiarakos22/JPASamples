@@ -14,10 +14,11 @@ public class EmployeeDao {
         this.entityManager = entityManager;
     }
 
-    public Employee createEmployee(int id, String name, long salary) {
+    public Employee createEmployee(int id, String name, long salary, String mobileNumber) {
         Employee employee = new Employee(id);
         employee.setName(name);
         employee.setSalary(salary);
+        employee.setPhone(mobileNumber);
         entityManager.persist(employee);
         return employee;
     }

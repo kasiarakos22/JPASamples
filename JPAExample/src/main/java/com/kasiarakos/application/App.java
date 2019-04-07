@@ -18,9 +18,9 @@ public class App {
 
         System.out.println("********** Creating Employees **********");
         entityManager.getTransaction().begin();
-        System.out.println(employeeDao.createEmployee(1, "Dimitris Kasiaras", 50000));
-        System.out.println(employeeDao.createEmployee(2, "Sofia Karka", 50000));
-        System.out.println(employeeDao.createEmployee(3, "Nefeli Kasiaras", 50000));
+        System.out.println(employeeDao.createEmployee(1, "Dimitris Kasiaras", 50000, "+306983203139"));
+        System.out.println(employeeDao.createEmployee(2, "Sofia Karka", 50000, "+306983203139"));
+        System.out.println(employeeDao.createEmployee(3, "Nefeli Kasiaras", 50000, "+306983203139"));
         entityManager.getTransaction().commit();
         System.out.println();
 
