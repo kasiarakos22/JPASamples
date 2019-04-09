@@ -1,10 +1,27 @@
 package com.kasiarakos.domain;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 @Entity
@@ -12,25 +29,56 @@ import javax.persistence.Transient;
 public class Employee {
 
     @Id
-    private int id;
+    @TableGenerator(name="Emp_Gen")
+    @GeneratedValue(generator="Emp_Gen")
+    private long id;
     private String name;
     private long salary;
-    @javax.persistence.Basic
-    @Transient
-    private String phone;
 
-    public Employee() {
+    @ManyToOne
+    @JoinColumn(name="DEPT_ID")
+    private Department department;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "PARKING_ID")
+    private ParkingSpace parkingSpace;
+
+    @ManyToMany
+    @JoinTable(name="EMP_PROJ",
+        joinColumns=@JoinColumn(name="EMP_ID"),
+        inverseJoinColumns=@JoinColumn(name="PROJ_ID"))
+    private Collection<Project> projects;
+
+    @Embedded  private Address address;
+
+    @ElementCollection
+    private Collection<String> phones;
+
+    @ElementCollection
+    private Set<String> nickNames;
+
+
+    public ParkingSpace getParkingSpace() {
+        return parkingSpace;
     }
 
-    public Employee(int id) {
-        this.id = id;
+    public void setParkingSpace(ParkingSpace parkingSpace) {
+        this.parkingSpace = parkingSpace;
     }
 
-    public int getId() {
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -50,22 +98,36 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getPhone() {
-        return phone;
+    public Collection<String> getPhones() {
+        return phones;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhones(Collection<String>  phones) {
+        this.phones = phones;
     }
 
-    @Access(AccessType.PROPERTY)
-    @Column(name = "phone")
-    public String getPhoneDB() {
-        return phone.substring(phone.length() - 10);
+    public Collection<Project> getProjects() {
+        return projects;
     }
 
-    public void setPhoneDB(String phone) {
-        this.phone = phone;
+    public void setProjects(Collection<Project> projects) {
+        this.projects = projects;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Set<String> getNickNames() {
+        return nickNames;
+    }
+
+    public void setNickNames(Set<String> nickNames) {
+        this.nickNames = nickNames;
     }
 
     @Override
@@ -74,7 +136,10 @@ public class Employee {
             "id=" + id +
             ", name='" + name + '\'' +
             ", salary=" + salary +
-            ", phone='" + phone + '\'' +
+            ", department=" + department +
+            ", parkingSpace=" + parkingSpace +
+            ", projects=" + projects +
+            ", phones=" + phones +
             '}';
     }
 }

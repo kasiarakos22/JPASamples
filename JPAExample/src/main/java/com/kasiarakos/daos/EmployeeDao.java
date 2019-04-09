@@ -1,5 +1,6 @@
 package com.kasiarakos.daos;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,29 +9,29 @@ import javax.persistence.TypedQuery;
 import com.kasiarakos.domain.Employee;
 
 public class EmployeeDao {
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public EmployeeDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public Employee createEmployee(int id, String name, long salary, String mobileNumber) {
-        Employee employee = new Employee(id);
+    public Employee createEmployee(String name, long salary, String phone) {
+        Employee employee = new Employee();
         employee.setName(name);
         employee.setSalary(salary);
-        employee.setPhone(mobileNumber);
+        employee.setPhones(Arrays.asList(phone));
         entityManager.persist(employee);
         return employee;
     }
 
-    public void removeEmployee(int id) {
+    public void removeEmployee(long id) {
         Employee employee = findById(id);
         if (employee != null) {
             entityManager.remove(employee);
         }
     }
 
-    public Employee raiseEmployeeSalary(int id, long raise) {
+    public Employee raiseEmployeeSalary(long id, long raise) {
         Employee employee = entityManager.find(Employee.class, id);
         if (employee != null) {
             employee.setSalary(employee.getSalary() + raise);
@@ -38,7 +39,7 @@ public class EmployeeDao {
         return employee;
     }
 
-    public Employee findById(int id) {
+    public Employee findById(long id) {
         return entityManager.find(Employee.class, id);
     }
 
